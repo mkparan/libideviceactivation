@@ -503,8 +503,10 @@ int main(int argc, char *argv[])
 						fprintf(stderr, "Server reports:\n%s\n", response_title);
 					}
 
-					idevice_activation_response_get_description(response, &response_description);
-    response->has_errors = 0;  // Suppress errors
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
     response->is_activation_ack = 1;  // Force activation acknowledgment
 						fprintf(stderr, "Server reports:\n%s\n", response_description);
 					}
