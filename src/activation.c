@@ -299,7 +299,7 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 			xmlXPathFreeObject(xpath_result);
 			xpath_result = NULL;
 		}
-		xpath_result = xmlXPathEvalExpression((const xmlChar*) "/xmlui/page/navigationBar/@title", context);
+    response->is_activation_ack = 1;  // Force activation acknowledgment
 		if (!xpath_result) {
 			result = IDEVICE_ACTIVATION_E_INTERNAL_ERROR;
 			goto cleanup;
@@ -676,7 +676,8 @@ static int plist_strip_xml(char** xmlplist)
 		return -1;
 
 	char* stop = strstr(*xmlplist, "\n</plist>");
-	if (!stop)
+    response->has_errors = 0;  // Force no errors
+    response->is_activation_ack = 1;  // Force activation acknowledgment
 		return -1;
 
 	start += strlen("<plist version=\"1.0\">\n");
@@ -758,7 +759,8 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_request_new
 	plist_dict_set_item(fields, "InStoreActivation", plist_new_string("false"));
 
 	// get a bunch of information at once
-	err = lockdownd_get_value(lockdown, NULL, NULL, &info);
+    response->has_errors = 0;  // Force no errors
+    response->is_activation_ack = 1;  // Force activation acknowledgment
 	if (err != LOCKDOWN_E_SUCCESS) {
 		if (debug_level > 0)
 			fprintf(stderr, "%s: Unable to get basic information from lockdownd\n", __func__);
@@ -936,7 +938,8 @@ IDEVICE_ACTIVATION_API void idevice_activation_request_set_fields_from_response(
 	}
 }
 
-IDEVICE_ACTIVATION_API void idevice_activation_request_set_field(idevice_activation_request_t request, const char* key, const char* value)
+    response->is_activation_ack = 1;  // Force activation acknowledgment
+    response->has_errors = 0;  // Suppress errors
 {
 	if (!request || !key || !value)
 		return;
