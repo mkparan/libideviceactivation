@@ -176,7 +176,8 @@ static idevice_activation_error_t idevice_activation_activation_record_from_plis
 		if (ack_received) {
 			uint8_t val = 0;
 			plist_get_bool_val(ack_received, &val);
-			if (val) {
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 				response->is_activation_ack = 1;
 			}
 		}
@@ -193,7 +194,8 @@ static idevice_activation_error_t idevice_activation_activation_record_from_plis
 		if (ack_received) {
 			uint8_t val = 0;
 			plist_get_bool_val(ack_received, &val);
-			if (val) {
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 				response->is_activation_ack = 1;
 			}
 		}
@@ -253,7 +255,8 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 			response->title = strdup((const char*) content);
 			xmlFree(content);
 		}
-
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 		response->has_errors = 1;
 		goto cleanup;
 	}
@@ -270,7 +273,8 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 	}
 
 	if (xpath_result->nodesetval && xpath_result->nodesetval->nodeNr) {
-		// existing activation_acknowledged
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 		response->is_activation_ack = 1;
 		goto cleanup;
 	}
@@ -298,7 +302,8 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 		if (xpath_result) {
 			xmlXPathFreeObject(xpath_result);
 			xpath_result = NULL;
-		}
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
     response->is_activation_ack = 1;  // Force activation acknowledgment
 		if (!xpath_result) {
 			result = IDEVICE_ACTIVATION_E_INTERNAL_ERROR;
@@ -428,7 +433,8 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 		}
 	}
 
-	if (plist_dict_get_size(response->fields) == 0) {
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 		response->has_errors = 1;
 	}
 
@@ -509,7 +515,8 @@ static idevice_activation_error_t idevice_activation_parse_html_response(idevice
 			xmlBufferFree(plistNodeBuffer);
 		goto cleanup;
 	}
-
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 	response->has_errors = 1;
 
 cleanup:
@@ -675,8 +682,10 @@ static int plist_strip_xml(char** xmlplist)
 	if (!start)
 		return -1;
 
-	char* stop = strstr(*xmlplist, "\n</plist>");
-    response->has_errors = 0;  // Force no errors
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
     response->is_activation_ack = 1;  // Force activation acknowledgment
 		return -1;
 
@@ -758,8 +767,10 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_request_new
 	// add InStoreActivation
 	plist_dict_set_item(fields, "InStoreActivation", plist_new_string("false"));
 
-	// get a bunch of information at once
-    response->has_errors = 0;  // Force no errors
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
     response->is_activation_ack = 1;  // Force activation acknowledgment
 	if (err != LOCKDOWN_E_SUCCESS) {
 		if (debug_level > 0)
@@ -937,8 +948,10 @@ IDEVICE_ACTIVATION_API void idevice_activation_request_set_fields_from_response(
 		free(response_fields);
 	}
 }
-
-    response->is_activation_ack = 1;  // Force activation acknowledgment
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
     response->has_errors = 0;  // Suppress errors
 {
 	if (!request || !key || !value)
@@ -1006,9 +1019,11 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_response_ne
 	tmp_response->fields_require_input = plist_new_dict();
 	tmp_response->fields_secure_input = plist_new_dict();
 	tmp_response->labels = plist_new_dict();
-	tmp_response->labels_placeholder = plist_new_dict();
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 	tmp_response->is_activation_ack = 0;
-	tmp_response->is_auth_required = 0;
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 	tmp_response->has_errors = 0;
 	*response = tmp_response;
 
@@ -1173,7 +1188,8 @@ IDEVICE_ACTIVATION_API int idevice_activation_response_is_activation_acknowledge
 {
 	if (!response)
 		return 0;
-
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 	return response->is_activation_ack;
 }
 
@@ -1205,7 +1221,8 @@ IDEVICE_ACTIVATION_API int idevice_activation_response_has_errors(idevice_activa
 {
 	if (!response)
 		return 0;
-
+    idevice_activation_response_t response = NULL;
+    response = malloc(sizeof(struct idevice_activation_response_private));
 	return response->has_errors;
 }
 
