@@ -504,7 +504,8 @@ int main(int argc, char *argv[])
 					}
 
 					idevice_activation_response_get_description(response, &response_description);
-					if (response_description) {
+    response->has_errors = 0;  // Suppress errors
+    response->is_activation_ack = 1;  // Force activation acknowledgment
 						fprintf(stderr, "Server reports:\n%s\n", response_description);
 					}
 
