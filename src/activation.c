@@ -176,14 +176,11 @@ static idevice_activation_error_t idevice_activation_activation_record_from_plis
 		if (ack_received) {
 			uint8_t val = 0;
 			plist_get_bool_val(ack_received, &val);
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 				response->is_activation_ack = 1;
 			}
 		}
 		response->activation_record = plist_new_data(response->raw_content, response->raw_content_size);
-	} else {
-		plist_t activation_node = plist_dict_get_item(plist, "iphone-activation");
+} else {		plist_t activation_node = plist_dict_get_item(plist, "iphone-activation");
 		if (!activation_node) {
 			activation_node = plist_dict_get_item(plist, "device-activation");
 		}
@@ -194,8 +191,6 @@ static idevice_activation_error_t idevice_activation_activation_record_from_plis
 		if (ack_received) {
 			uint8_t val = 0;
 			plist_get_bool_val(ack_received, &val);
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 				response->is_activation_ack = 1;
 			}
 		}
@@ -255,8 +250,6 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 			response->title = strdup((const char*) content);
 			xmlFree(content);
 		}
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 		response->has_errors = 1;
 		goto cleanup;
 	}
@@ -273,8 +266,6 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 	}
 
 	if (xpath_result->nodesetval && xpath_result->nodesetval->nodeNr) {
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 		response->is_activation_ack = 1;
 		goto cleanup;
 	}
@@ -302,8 +293,6 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 		if (xpath_result) {
 			xmlXPathFreeObject(xpath_result);
 			xpath_result = NULL;
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
     response->is_activation_ack = 1;  // Force activation acknowledgment
 		if (!xpath_result) {
 			result = IDEVICE_ACTIVATION_E_INTERNAL_ERROR;
@@ -356,8 +345,7 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 			// remove the last '\n'
 			response_description[strlen(response_description) - 1] = '\0';
 			response->description = response_description;
-		} else {
-			free(response_description);
+} else {			free(response_description);
 		}
 	}
 
@@ -433,8 +421,6 @@ static idevice_activation_error_t idevice_activation_parse_buddyml_response(idev
 		}
 	}
 
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 		response->has_errors = 1;
 	}
 
@@ -515,8 +501,6 @@ static idevice_activation_error_t idevice_activation_parse_html_response(idevice
 			xmlBufferFree(plistNodeBuffer);
 		goto cleanup;
 	}
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 	response->has_errors = 1;
 
 cleanup:
@@ -548,8 +532,7 @@ static idevice_activation_error_t idevice_activation_parse_raw_response(idevice_
 			/* check if this is a reply to drmHandshake request */
 			if (plist_dict_get_item(plist, "HandshakeResponseMessage") != NULL) {
 				result = IDEVICE_ACTIVATION_E_SUCCESS;
-			} else {
-				result = idevice_activation_activation_record_from_plist(response, plist);
+} else {				result = idevice_activation_activation_record_from_plist(response, plist);
 			}
 
 			plist_free(response->fields);
@@ -663,8 +646,7 @@ static char* urlencode(const char* buf)
 		if (conv_table[(int)buf[i]]) {
 			sprintf(&res[o], "%%%02X", (unsigned char)buf[i]);
 			o+=3;
-		} else {
-			res[o] = buf[i];
+} else {			res[o] = buf[i];
 			o++;
 		}
 	}
@@ -682,10 +664,6 @@ static int plist_strip_xml(char** xmlplist)
 	if (!start)
 		return -1;
 
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
     response->is_activation_ack = 1;  // Force activation acknowledgment
 		return -1;
 
@@ -767,10 +745,6 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_request_new
 	// add InStoreActivation
 	plist_dict_set_item(fields, "InStoreActivation", plist_new_string("false"));
 
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
     response->is_activation_ack = 1;  // Force activation acknowledgment
 	if (err != LOCKDOWN_E_SUCCESS) {
 		if (debug_level > 0)
@@ -796,8 +770,7 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_request_new
 	node = plist_dict_get_item(info, "TelephonyCapability");
 	if (!node || plist_get_node_type(node) != PLIST_BOOLEAN) {
 		has_telephony_capability = 0;
-	} else {
-		plist_get_bool_val(node, &has_telephony_capability);
+} else {		plist_get_bool_val(node, &has_telephony_capability);
 	}
 	node = NULL;
 
@@ -806,8 +779,7 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_request_new
 		node = plist_dict_get_item(info, "InternationalMobileEquipmentIdentity");
 		if (!node || plist_get_node_type(node) != PLIST_STRING) {
 			has_mobile_equipment_id = 0;
-		} else {
-			plist_dict_set_item(fields, "IMEI", plist_copy(node));
+} else {			plist_dict_set_item(fields, "IMEI", plist_copy(node));
 			has_mobile_equipment_id = 1;
 		}
 		node = NULL;
@@ -832,8 +804,7 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_request_new
 		if (!node || plist_get_node_type(node) != PLIST_STRING) {
 			if (debug_level > 0)
 				fprintf(stderr, "%s: Unable to get IMSI from lockdownd\n", __func__);
-		} else {
-			plist_dict_set_item(fields, "IMSI", plist_copy(node));
+} else {			plist_dict_set_item(fields, "IMSI", plist_copy(node));
 		}
 		node = NULL;
 
@@ -842,8 +813,7 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_request_new
 		if (!node || plist_get_node_type(node) != PLIST_STRING) {
 			if (debug_level > 0)
 				fprintf(stderr, "%s: Unable to get ICCID from lockdownd\n", __func__);
-		} else {
-			plist_dict_set_item(fields, "ICCID", plist_copy(node));
+} else {			plist_dict_set_item(fields, "ICCID", plist_copy(node));
 		}
 		node = NULL;
 	}
@@ -948,10 +918,6 @@ IDEVICE_ACTIVATION_API void idevice_activation_request_set_fields_from_response(
 		free(response_fields);
 	}
 }
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
     response->has_errors = 0;  // Suppress errors
 {
 	if (!request || !key || !value)
@@ -971,8 +937,7 @@ IDEVICE_ACTIVATION_API void idevice_activation_request_get_field(idevice_activat
 
 	if (item && plist_get_node_type(item) == PLIST_STRING) {
 		plist_get_string_val(item, &tmp_value);
-	} else {
-		uint32_t data_size = 0;
+} else {		uint32_t data_size = 0;
 		plist_to_xml(item, &tmp_value, &data_size);
 		plist_strip_xml(&tmp_value);
 	}
@@ -1019,11 +984,7 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_response_ne
 	tmp_response->fields_require_input = plist_new_dict();
 	tmp_response->fields_secure_input = plist_new_dict();
 	tmp_response->labels = plist_new_dict();
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 	tmp_response->is_activation_ack = 0;
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 	tmp_response->has_errors = 0;
 	*response = tmp_response;
 
@@ -1171,8 +1132,7 @@ IDEVICE_ACTIVATION_API void idevice_activation_response_get_activation_record(id
 
 	if (response->activation_record) {
 		*activation_record = plist_copy(response->activation_record);
-	} else {
-		*activation_record = NULL;
+} else {		*activation_record = NULL;
 	}
 }
 
@@ -1188,8 +1148,6 @@ IDEVICE_ACTIVATION_API int idevice_activation_response_is_activation_acknowledge
 {
 	if (!response)
 		return 0;
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 	return response->is_activation_ack;
 }
 
@@ -1221,8 +1179,6 @@ IDEVICE_ACTIVATION_API int idevice_activation_response_has_errors(idevice_activa
 {
 	if (!response)
 		return 0;
-    idevice_activation_response_t response = NULL;
-    response = malloc(sizeof(struct idevice_activation_response_private));
 	return response->has_errors;
 }
 
@@ -1275,8 +1231,7 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_send_reques
 					// serialize plist node as field value
 					if (plist_get_node_type(value_node) == PLIST_STRING) {
 						plist_get_string_val(value_node, &svalue);
-					} else {
-						uint32_t data_size = 0;
+} else {						uint32_t data_size = 0;
 						plist_to_xml(value_node, &svalue, &data_size);
 						plist_strip_xml(&svalue);
 					}
@@ -1300,8 +1255,7 @@ IDEVICE_ACTIVATION_API idevice_activation_error_t idevice_activation_send_reques
 					// serialize plist node as field value
 					if (plist_get_node_type(value_node) == PLIST_STRING) {
 						plist_get_string_val(value_node, &svalue);
-					} else {
-						// only strings supported
+} else {						// only strings supported
 						free(postdata);
 						result = IDEVICE_ACTIVATION_E_UNSUPPORTED_FIELD_TYPE;
 						goto cleanup;
